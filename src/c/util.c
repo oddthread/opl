@@ -87,6 +87,20 @@ char *str_remove(char *str, u32 position)
 	str=(char*)realloc(str,str_size);
 	return str;
 }
+char *str_remove_characters(char *str, char c)
+{
+	u32 i=0;
+	while(str[i])
+	{
+		if(str[i]==c)
+		{
+			str=str_remove(str,i);
+			i--;
+		}
+		i++;
+	}
+	return str;
+}
 
 vec2 value_vec2(f32 size_x, f32 size_y)
 {

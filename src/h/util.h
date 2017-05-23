@@ -34,6 +34,8 @@ char *malloc_str_slice(char *c, s32 begin, s32 end);
 char *str_insert(char *str, char c, u32 position);
 /*frees parameter and mallocs return val*/
 char *str_remove(char *str, u32 position);
+/*frees parameter and mallocs return val*/
+char *str_remove_characters(char *str, char c);
 /*doesnt free either parameter*/
 char *str_cat(char *a, char *b);
 

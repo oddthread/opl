@@ -4,11 +4,15 @@
 #include "../h/util.h"
 
 int rand_num(s32 min, s32 max);
-void sleep(u32 milliseconds);
+void sleep_milli(u32 milliseconds);
 s64 milli_current_time();
 char *malloc_file_cstr(char const *path);
 void write_file_cstr(char const *path, char const *cstr);
 int rand_num(s32 min, s32 max);
+char *get_clipboard_text();
+void set_clipboard_text(char *c);
+
+void sdl_free(void* p);
 /*
 struct raw_thread;
 void wait_thread(raw_thread *t,int *status_out);

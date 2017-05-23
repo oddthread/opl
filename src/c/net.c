@@ -1,7 +1,13 @@
 #ifdef __APPLE__
 #include <SDL2_net/SDL_net.h>
 #else
+
+#ifdef __EMSCRIPTEN__
+#include <SDL_net.h>
+#else
 #include <SDL2/SDL_net.h>
+#endif 
+
 #endif
 
 #include <stdio.h>

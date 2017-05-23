@@ -56,7 +56,7 @@ void flush_events(s32 event_type)
 	}
 	if(event_type==MOUSE_EVENTS)
 	{
-		SDL_FlushEvent(SDL_MOUSEBUTTONDOWN);
+		SDL_FlushEvent(SDL_MOUSEBUTTONDOWN | SDL_MOUSEBUTTONUP);
 	}
 }
 
@@ -178,7 +178,7 @@ const s64 WINDOW_CLOSE=SDL_WINDOWEVENT_CLOSE;
 extern const s64 FOCUS_GAINED=SDL_WINDOWEVENT_FOCUS_GAINED;
 extern const s64 FOCUS_LOST=SDL_WINDOWEVENT_FOCUS_LOST;
 
-event *poll(event *e)
+event *poll_input(event *e)
 {
 	SDL_Event sdl_event;
 	if(SDL_PollEvent( &sdl_event ))

@@ -14,7 +14,7 @@ typedef struct event
 } event;
 
 /*on windows you must call this every frame*/
-event *poll(event*);
+event *poll_input(event*);
 
 extern const s32 ALL_EVENTS;
 extern const s32 MOUSE_EVENTS;
@@ -22,7 +22,7 @@ void flush_events(s32 event_type);
 
 char apply_shift(char c,bool include_non_alpha);
 
-
+void set_mouse_capture_on_currently_focused_window(bool capture);
 typedef struct system_cursor system_cursor;
 
 extern system_cursor *CURSOR_TEXT;

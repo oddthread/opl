@@ -16,11 +16,24 @@
 #include "../h/util.h"
 #include <time.h>
 
+
+char *get_clipboard_text()
+{
+	return SDL_GetClipboardText();
+}
+void sdl_free(void* p)
+{
+	SDL_free(p);
+}
+void set_clipboard_text(char *c)
+{
+	SDL_SetClipboardText(c);
+}
 s64 milli_current_time()
 {
 	return SDL_GetTicks();
 }
-void sleep(u32 milliseconds)
+void sleep_milli(u32 milliseconds)
 {
 	SDL_Delay(milliseconds);
 }

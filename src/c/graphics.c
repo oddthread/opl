@@ -7,7 +7,13 @@
 #else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+
+#ifdef __EMSCRIPTEN__
+#include <SDL_ttf.h>
+#else
 #include <SDL2/SDL_ttf.h>
+#endif
+
 #endif
 
 #include "../h/graphics.h"
