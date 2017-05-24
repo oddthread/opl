@@ -73,6 +73,7 @@ f64 vec2_len();
 vec2 vec2_abs();
 vec2 vec2_unit();
 vec2 vec2_add(vec2 a, vec2 b);
+vec2 vec2_sub(vec2 a, vec2 b);
 
 f64 vec4_len(vec4 v);
 vec4 vec4_unit(vec4 v);

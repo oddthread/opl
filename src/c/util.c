@@ -143,6 +143,13 @@ vec2 vec2_add(vec2 a, vec2 b)
 	v.y=a.y+b.y;
 	return v;
 }
+vec2 vec2_sub(vec2 a, vec2 b)
+{
+	vec2 v;
+	v.x=a.x-b.x;
+	v.y=a.y-b.y;
+	return v;
+}
 
 f64 vec4_len(vec4 v)
 {
