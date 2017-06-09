@@ -304,8 +304,11 @@ void texture_set_alpha(texture *t, u8 alpha)
 }
 void dtor_texture(texture *t)
 {
-	SDL_DestroyTexture(t->sdl_texture);
-	free (t);
+	if(t && t->sdl_texture)
+	{
+		SDL_DestroyTexture(t->sdl_texture);
+		free (t);
+	}
 }
 void draw_texture(window *w, texture *texture, rect *dest, f32 angle, vec2 *origin, rect *src, rect *clip_region)
 {
