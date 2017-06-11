@@ -282,8 +282,19 @@ texture *ctor_texture_font(window *w, ttf_font *f,char const *text, color text_c
 	sdl_c.g=text_color.g;
 	sdl_c.b=text_color.b;
 	sdl_c.a=text_color.a;
+	if(!text||!text[0])return NULL;	
 	SDL_Surface *surf=TTF_RenderText_Blended(f->font,text,sdl_c);
-	SDL_Texture *sdl_t=SDL_CreateTextureFromSurface(w->sdl_renderer,surf);
+	if(!surf)
+	{
+        	printf(SDL_GetError());
+		return NULL;
+	}
+	SDL_Texture *sdl_t=SDL_CreateTextureFromSurface(w->sdl_renderer,surf); 
+	if(!sdl_t)
+	{
+        	printf(SDL_GetError());
+		return NULL;
+	}
 	texture *t=(texture*)malloc(sizeof(texture));
 	t->sdl_texture=sdl_t;
 	SDL_FreeSurface(surf);
@@ -312,6 +323,7 @@ void dtor_texture(texture *t)
 }
 void draw_texture(window *w, texture *texture, rect *dest, f32 angle, vec2 *origin, rect *src, rect *clip_region)
 {
+	if(!texture)return;
 	//these rect structs have same format? can just cast?
 	SDL_Rect sdl_clip_region;
 
@@ -371,6 +383,9 @@ ttf_font *ctor_ttf_font(char const *font_file_path,int fontsize)
 {
 	ttf_font *f=(ttf_font*)malloc(sizeof(ttf_font));
 	f->font=TTF_OpenFont(font_file_path, fontsize);
+
+	if(!f->font)printf(SDL_GetError());
+
 	return f;
 }
 void dtor_ttf_font(ttf_font *font)
@@ -380,6 +395,19 @@ void dtor_ttf_font(ttf_font *font)
 }
 void size_ttf_font(ttf_font *font, const char *text, int *out_w, int *out_h)
 {
+    /*
+    this check is for linux, on windows it works perfectly fine without this.
+    either TTF_SizeText works on windows with an empty string, or uninitialized variables (the out_w, out_h) happen to be the correct value?
+    */
+	if(!text||!text[0])
+	{
+	    if(out_w)*out_w=0;
+        if(out_h)
+        {
+	        TTF_SizeText(font->font,"test",NULL,out_h);
+        }
+	    return;
+    }
 	TTF_SizeText(font->font,text,out_w,out_h);
 }
 

@@ -36,7 +36,9 @@ void init_input()
 
 void set_mouse_capture_on_currently_focused_window(bool capture)
 {
+	#ifdef _WIN32	
 	SDL_CaptureMouse(capture);
+	#endif
 }
 	
 
