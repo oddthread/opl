@@ -3,7 +3,9 @@
 
 #include <stdint.h>
 
-#define DEBUG 1
+#ifndef NULL
+#define NULL 0
+#endif
 
 typedef uint64_t u64;
 typedef uint32_t u32;
