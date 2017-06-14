@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #ifndef NULL
-#define NULL 0
+#define NULL ((void *)0)
 #endif
 
 typedef uint64_t u64;
@@ -25,8 +25,13 @@ typedef float f32;
 	typedef u8 bool;
 	#endif
 
-#define true 1
-#define false 0
+    #ifndef true
+    #define true 1
+    #endif
+
+    #ifndef false
+    #define false 0
+    #endif
 #endif
 
 extern const f64 PI;
