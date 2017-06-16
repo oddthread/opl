@@ -36,6 +36,9 @@ typedef float f32;
 
 extern const f64 PI;
 
+void str_reverse(char *str, int length);
+char* itoa(int num, char* str, int base);
+
 char *malloc_str_slice(char *c, s32 begin, s32 end);
 /*frees parameter and mallocs return val*/
 char *str_insert(char *str, char c, u32 position);

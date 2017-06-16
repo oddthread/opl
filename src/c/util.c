@@ -11,6 +11,55 @@
 
 const f64 PI=3.1415926535897;
 
+void str_reverse(char *str, int length)
+{
+    int start = 0;
+    int end = length -1;
+    while (start < end)
+    {
+        char temp=*(str+start);
+	char temp2=*(str+end);
+	*(str+start)=temp2;
+	*(str+end)=temp;
+
+        start++;
+        end--;
+    }
+}
+char* itoa(int num, char* str, int base)
+{
+    int i;
+    bool is_negative;
+    
+    is_negative = false;
+    i=0;
+    if (num == 0)
+    {
+        str[i++] = '0';
+        str[i] = '\0';
+        return str;
+    } 
+    if (num < 0 && base == 10)
+    {
+        is_negative = true;
+        num = -num;
+    } 
+    while (num != 0)
+    {
+        int rem = num % base;
+        str[i++] = (rem > 9)? (rem-10) + 'a' : rem + '0';
+        num = num/base;
+    }
+ 
+    if (is_negative)
+        str[i++] = '-';
+ 
+    str[i] = '\0';
+    
+    str_reverse(str, i);
+ 
+    return str;
+}
 
 char *malloc_str_slice(char *c, s32 begin, s32 end)
 {
