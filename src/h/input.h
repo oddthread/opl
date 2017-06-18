@@ -33,6 +33,7 @@ void set_cursor(system_cursor *);
 s32 get_mod_state();//call to get thing to and with mods
 /*other constants*/
 extern const s32 KEY_MOD_CAPS;
+extern const s32 KEY_MOD_SHIFT;
 
 /*event constants*/
 extern const s64 LEFT_MOUSE;

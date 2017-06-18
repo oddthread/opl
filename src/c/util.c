@@ -71,14 +71,18 @@ char *malloc_str_slice(char *c, s32 begin, s32 end)
 		return emptystr; 
 	}
 	u32 str_length=end-begin+1+1;
+	
 	char *retval=(char*)malloc(str_length);
+	
 	u32 i2=0;
 	for(u32 i=begin; i<=end; i+=1)
 	{
 		retval[i2]=c[i];
 		i2+=1;
 	}
+	
 	retval[str_length-1]=0;
+	
 	return retval;
 }
 /*frees parameter and mallocs return val*/

@@ -66,7 +66,8 @@ s32 get_mod_state()
 {
 	return SDL_GetModState();
 }
-extern const s32 KEY_MOD_CAPS=KMOD_CAPS;
+const s32 KEY_MOD_CAPS=KMOD_CAPS;
+const s32 KEY_MOD_SHIFT=KMOD_SHIFT;
 
 const s64 LEFT_MOUSE=SDL_BUTTON_LEFT;
 const s64 RIGHT_MOUSE=SDL_BUTTON_RIGHT;
