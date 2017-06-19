@@ -10,7 +10,7 @@
 #endif
 
 const f64 PI=3.1415926535897;
-
+    
 void str_reverse(char *str, int length)
 {
     int start = 0;
@@ -224,4 +224,12 @@ vec4 vec4_mul(vec4 a,vec4 b)
 	a.z*=b.z;
 	a.w*=b.w;
 	return a;
+}
+
+bool insec(vec2 pos_a, vec2 size_a, vec2 pos_b, vec2 size_b) 
+{
+    return !(pos_b.x > pos_a.x + size_a.x ||
+        pos_b.x + size_b.x < pos_a.x ||
+        pos_b.y > pos_a.y + size_a.y ||
+        pos_b.y + size_b.y < pos_a.y);
 }

@@ -3,6 +3,28 @@
 
 #include <stdint.h>
 
+
+#define M_INSERT(array,array_size,position,element) array_size+=1;\
+array=realloc(array,array_size*sizeof(element));\
+for(i=array_size-2; i>=position; i--)\
+{\
+    array[i+1]=array[i];\
+}\
+array[position]=element;
+
+#define M_APPEND(array,array_size,element) array_size+=1;\
+array=realloc(array,array_size*sizeof(element));\
+array[array_size-1]=element;
+
+#define M_REMOVE(array,array_size,position,fn,type) fn(array[position]);\
+for(i=position; i<array_size-1; i++)\
+{\
+    array[i]=array[i+1];\
+    printf("%d\n",array[i]);\
+}\
+array_size-=1;\
+array=realloc(array,array_size*sizeof(type));
+        
 #ifndef NULL
 #define NULL ((void *)0)
 #endif
@@ -88,5 +110,7 @@ vec2 vec2_sub(vec2 a, vec2 b);
 f64 vec4_len(vec4 v);
 vec4 vec4_unit(vec4 v);
 vec4 vec4_mul(vec4 a,vec4 b);
+
+bool insec(pos_a, size_a, pos_b, size_b);
 
 #endif
