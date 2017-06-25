@@ -19,8 +19,31 @@ typedef struct system_cursor
 	SDL_Cursor *c;
 } system_cursor;
 
+/* @bug @corruption
+if CURSOR_TEXT and CURSOR_NORMAL are not zero initialized:
+
+when pasting a multiline comment (or probably any add_text call with multiple lines)
+then selecting multiple lines, and pressing tab to insert four spaces and delete the selection,
+after that moving the mouse causes a crash.
+It changes the value of the cursor and the next call to set_cursor will pass invalid memory.
+
+This happens because some code is writing to statically allocated storage space, specifically .DATA segment, but
+zero initialized static variables go in .BSS segment 
+https://stackoverflow.com/questions/93039/where-are-static-variables-stored-in-c-c
+
+So by zero initializing it, it gets moved to a different location in memory and away from the area buggy code is overwriting
+(this is so bad)
+
+@FIXED
+the statically allocated variable was the ote_log_buffer, it was only 100 characters and I was writing more than 100 character logs,
+after increasing it to 1000 there are no more problems.
+
+the nuance of the bug described above was probably just because that was the code path that was calling the logging function.
+*/
 system_cursor *CURSOR_TEXT;
 system_cursor *CURSOR_NORMAL;
+static system_cursor *current_cursor=NULL;
+
 system_cursor *ctor_system_cursor(SDL_Cursor* c)
 {
 	system_cursor *s=malloc(sizeof(system_cursor));
@@ -44,7 +67,11 @@ void set_mouse_capture_on_currently_focused_window(bool capture)
 
 void set_cursor(system_cursor *s)
 {
-	SDL_SetCursor(s->c);
+	if(s!=current_cursor)
+	{
+		SDL_SetCursor(s->c);
+		current_cursor=s;
+	}
 }
 
 const s32 ALL_EVENTS=0;

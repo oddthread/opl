@@ -111,6 +111,6 @@ f64 vec4_len(vec4 v);
 vec4 vec4_unit(vec4 v);
 vec4 vec4_mul(vec4 a,vec4 b);
 
-bool insec(pos_a, size_a, pos_b, size_b);
+bool insec(vec2 pos_a, vec2 size_a, vec2 pos_b, vec2 size_b);
 
 #endif
