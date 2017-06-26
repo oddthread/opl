@@ -27,9 +27,10 @@ then selecting multiple lines, and pressing tab to insert four spaces and delete
 after that moving the mouse causes a crash.
 It changes the value of the cursor and the next call to set_cursor will pass invalid memory.
 
-This happens because some code is writing to statically allocated storage space, specifically .DATA segment, but
+This happens because some code is writing to statically allocated storage, .DATA segment, but
 zero initialized static variables go in .BSS segment 
 https://stackoverflow.com/questions/93039/where-are-static-variables-stored-in-c-c
+edit: it is zero initialized by default but apparently just assigning NULL to it will move it to the .DATA segment
 
 So by zero initializing it, it gets moved to a different location in memory and away from the area buggy code is overwriting
 (this is so bad)
@@ -101,6 +102,8 @@ const s64 RIGHT_MOUSE=SDL_BUTTON_RIGHT;
 const s64 MIDDLE_MOUSE=SDL_BUTTON_MIDDLE;
 const s64 MOUSE_MOTION=SDL_MOUSEMOTION;/*@bug i dont know what the range is on the SDL constants, this might also be another key*/
 const s64 MOUSE_WHEEL=SDL_MOUSEWHEEL;
+
+const s64 DROP_FILE=SDL_DROPFILE;
 
 const s64 KEY_LEFT=SDLK_LEFT;
 const s64 KEY_RIGHT=SDLK_RIGHT;
@@ -219,7 +222,11 @@ event *poll_input(event *e)
 			e->type=sdl_event.window.event;
 			e->id=sdl_event.window.windowID;	
 		}
-
+		if(sdl_event.type==SDL_DROPFILE)
+		{
+			e->type=SDL_DROPFILE;
+			e->str=sdl_event.drop.file;
+		}
 		if( sdl_event.key.type == SDL_KEYDOWN )
 		{
 			e->type=sdl_event.key.keysym.sym;

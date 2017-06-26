@@ -11,6 +11,7 @@ typedef struct event
 	bool pressed;
 	vec2 mouse_info;
 	s64 id;
+	char *str;
 } event;
 
 /*on windows you must call this every frame*/
@@ -41,6 +42,8 @@ extern const s64 RIGHT_MOUSE;
 extern const s64 MIDDLE_MOUSE;
 extern const s64 MOUSE_MOTION;
 extern const s64 MOUSE_WHEEL;
+
+extern const s64 DROP_FILE;
 
 extern const s64 KEY_LEFT;
 extern const s64 KEY_RIGHT;

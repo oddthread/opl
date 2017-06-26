@@ -38,11 +38,6 @@ void sleep_milli(u32 milliseconds)
 	SDL_Delay(milliseconds);
 }
 
-#if 0
-int rand_num(s32 min, s32 max)
-{
-    return 42;//@todo @bug @temp
-}
 
 char *malloc_file_cstr(char const *path)
 {//at least 2x slower than it should be
@@ -76,6 +71,7 @@ char *malloc_file_cstr(char const *path)
 	char *buff=(char*)malloc(sz+1);
 	fread(buff, 1, sz, fp);
 	buff[sz]=0;
+	//printf("%d\n",buff[sz-1]);
     return buff;
 }
 void write_file_cstr(char const *path, char const *cstr)
@@ -100,12 +96,18 @@ void write_file_cstr(char const *path, char const *cstr)
     FILE* fp=fopen(path, "w");
     if(!fp)
     {
-        printf((string("Could not open file: ")+string(path)).c_str());
+        printf("Could not open file: %s\n",path);
 		return;
     }
 
     fprintf(fp,"%s",cstr);
     fclose(fp);
+}
+
+#if 0
+int rand_num(s32 min, s32 max)
+{
+    return 42;//@todo @bug @temp
 }
 #endif
 /*
