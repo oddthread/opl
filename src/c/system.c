@@ -71,6 +71,7 @@ char *malloc_file_cstr(char const *path)
 	char *buff=(char*)malloc(sz+1);
 	fread(buff, 1, sz, fp);
 	buff[sz]=0;
+	fclose(fp);
 	//printf("%d\n",buff[sz-1]);
     return buff;
 }
