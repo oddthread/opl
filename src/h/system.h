@@ -11,7 +11,7 @@ void write_file_cstr(char const *path, char const *cstr);
 int rand_num(s32 min, s32 max);
 char *get_clipboard_text();
 void set_clipboard_text(char *c);
-
+char *get_base_path();
 void sdl_free(void* p);
 /*
 struct raw_thread;

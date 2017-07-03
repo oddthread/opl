@@ -19,6 +19,7 @@ void window_toggle_fullscreen(window *w, bool fullscreen);
 void window_set_size(window *w, u32 size_x, u32 size_y);
 void window_get_size(window *w, int *out_width, int *out_height);
 void window_set_position(window *w,u32 position_x, u32 position_y);
+void window_set_icon(window* win, char *path);
 s32 window_get_id(window *w);
 //Clear screen
 void clear(window *w);
@@ -30,10 +31,10 @@ char const *get_error();
 
 typedef struct color
 {
-	u8 r;
-	u8 g;
-	u8 b;
-	u8 a;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
 } color;
 color value_color(u8 r,u8 g,u8 b, u8 a);
 color u32_to_color(u32 hex);

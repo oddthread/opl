@@ -96,10 +96,11 @@ void init_graphics()
 
 	SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1"); 
 	SDL_SetHintWithPriority(SDL_HINT_RENDER_VSYNC, "1", SDL_HINT_OVERRIDE); 
-	if(SDL_GL_SetSwapInterval(-1)==-1)
+	
+	/*if(SDL_GL_SetSwapInterval(-1)==-1)
 	{
 		SDL_GL_SetSwapInterval(1);
-	}
+	}*/
 }
 
 typedef struct window
@@ -186,6 +187,13 @@ void clear(window *w)
 void flip(window *w)
 {
 	SDL_RenderPresent( w->sdl_renderer );
+}
+
+void window_set_icon(window* win, char *path)
+{
+	SDL_Surface *s=IMG_Load(path);
+	SDL_SetWindowIcon(win->sdl_window,s);
+	SDL_FreeSurface(s);
 }
 
 static void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
@@ -366,10 +374,6 @@ void draw_texture(window *w, texture *texture, rect *dest, f32 angle, vec2 *orig
 		sdl_clip_region.h=clip_region->h;
 		SDL_RenderSetClipRect(w->sdl_renderer, &sdl_clip_region);
 	}
-	else
-	{
-		SDL_RenderSetClipRect(w->sdl_renderer, NULL);
-	}
 
 	if(origin)
 	{
@@ -377,6 +381,16 @@ void draw_texture(window *w, texture *texture, rect *dest, f32 angle, vec2 *orig
 		sdl_center.y=origin->y;
 	}
 	SDL_RenderCopyEx( w->sdl_renderer, texture->sdl_texture, src?&sdl_src:NULL, dest?&sdl_dest:NULL, angle, origin?&sdl_center:NULL, SDL_FLIP_NONE );
+	
+	/*@bug this wasnt getting reset when it was before if(clip_region)
+		when cursor was !visible it was causing line numbers to get redrawn multiple times per frame (or the appearance of that) when clipping was enabled on the normal line textures
+		making cursor permanently visible made it go away
+		this was probably due to the cursor setting the null clip rect
+		moving the sdl_rendersetcliprect call down below fixes this
+
+		it was doing some drawing elsewhere after the clip rect was set?
+	*/ 
+	SDL_RenderSetClipRect(w->sdl_renderer, NULL);
 }
 
 ttf_font *ctor_ttf_font(char const *font_file_path,int fontsize)

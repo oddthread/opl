@@ -104,7 +104,10 @@ void write_file_cstr(char const *path, char const *cstr)
     fprintf(fp,"%s",cstr);
     fclose(fp);
 }
-
+char *get_base_path()
+{
+	return SDL_GetBasePath();
+}
 #if 0
 int rand_num(s32 min, s32 max)
 {
