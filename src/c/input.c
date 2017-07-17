@@ -13,6 +13,8 @@
 #include "../h/input.h"
 #include "../h/util.h"
 
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct system_cursor 
 {
@@ -43,8 +45,19 @@ the nuance of the bug described above was probably just because that was the cod
 */
 system_cursor *CURSOR_TEXT;
 system_cursor *CURSOR_NORMAL;
+system_cursor *CURSOR_HAND;
 static system_cursor *current_cursor=NULL;
 
+vec2 get_mouse_position()
+{
+	vec2 v;
+	s32 x;
+	s32 y;
+	SDL_GetMouseState(&x,&y);
+	v.x=x;
+	v.y=y;
+	return v;
+}
 system_cursor *ctor_system_cursor(SDL_Cursor* c)
 {
 	system_cursor *s=malloc(sizeof(system_cursor));
@@ -56,6 +69,7 @@ void init_input()
 {
 	CURSOR_NORMAL=ctor_system_cursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW));
 	CURSOR_TEXT=ctor_system_cursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_IBEAM));
+	CURSOR_HAND=ctor_system_cursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND));
 }
 
 void set_mouse_capture_on_currently_focused_window(bool capture)
@@ -208,8 +222,8 @@ const s64 KEY_RIGHT_CONTROL=SDLK_RCTRL;
 const s64 KEY_RIGHT_ALT=SDLK_RALT;
 
 const s64 WINDOW_CLOSE=SDL_WINDOWEVENT_CLOSE;
-extern const s64 FOCUS_GAINED=SDL_WINDOWEVENT_FOCUS_GAINED;
-extern const s64 FOCUS_LOST=SDL_WINDOWEVENT_FOCUS_LOST;
+const s64 FOCUS_GAINED=SDL_WINDOWEVENT_FOCUS_GAINED;
+const s64 FOCUS_LOST=SDL_WINDOWEVENT_FOCUS_LOST;
 
 event *poll_input(event *e)
 {

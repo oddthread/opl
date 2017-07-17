@@ -5,6 +5,7 @@
 
 void init_input();
 
+vec2 get_mouse_position();
 typedef struct event
 {
 	s64 type;
@@ -28,6 +29,7 @@ typedef struct system_cursor system_cursor;
 
 extern system_cursor *CURSOR_TEXT;
 extern system_cursor *CURSOR_NORMAL;
+extern system_cursor *CURSOR_HAND;
 
 void set_cursor(system_cursor *);
 

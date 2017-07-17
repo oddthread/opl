@@ -55,7 +55,7 @@ texture *ctor_texture_font(window *w, ttf_font *f, char const *text, color text_
 void dtor_texture(texture *t);
 void texture_set_alpha(texture *t, u8 alpha);
 //color *malloc_query_texture_pixels(texture *t, u32 *out_size_x, u32 *out_size_y);
-void draw_texture(window *w, texture *texture, rect *dest, f32 angle, vec2 *origin, rect *src, rect *clip_region);
+void draw_texture(window *w, texture *texture, rect *dest, r32 angle, vec2 *origin, rect *src, rect *clip_region);
 
 #endif
 

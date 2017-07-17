@@ -9,7 +9,10 @@
 #include <SDL2/SDL.h>
 #endif
 
-const f64 PI=3.1415926535897;
+const r64 PI=3.1415926535897;
+    
+#include <stdlib.h>
+#include <string.h>
     
 void str_reverse(char *str, int length)
 {
@@ -67,7 +70,7 @@ char *malloc_str_slice(char *c, s32 begin, s32 end)
 	if(end-begin<0)
 	{
 		char *emptystr=malloc(1);
-		emptystr[0]=(char)NULL;
+		emptystr[0]=0;
 		return emptystr; 
 	}
 	u32 str_length=end-begin+1+1;
@@ -155,38 +158,38 @@ char *str_remove_characters(char *str, char c)
 	return str;
 }
 
-vec2 value_vec2(f32 size_x, f32 size_y)
+vec2 value_vec2(r32 size_x, r32 size_y)
 {
 	vec2 v;
 	v.x=size_x;
 	v.y=size_y;
 	return v;
 }
-vec2 vec2_scale(vec2 v,f64 factor)
+vec2 vec2_scale(vec2 v,r64 factor)
 {
 	v.x*=factor;
 	v.y*=factor;
 	return v;
 }
-f64 vec2_to_angle(vec2 v)
+r64 vec2_to_angle(vec2 v)
 {
 	return atan2(v.y, v.x)*180/PI;
 }
-f64 vec2_len(vec2 v)
+r64 vec2_len(vec2 v)
 {
 	return sqrt(pow(v.x,2)+pow(v.y,2));
 }
 vec2 vec2_unit(vec2 v)
 {
-	f64 lenvalue=vec2_len(v);
+	r64 lenvalue=vec2_len(v);
 	v.x=v.x/lenvalue;
 	v.y=v.y/lenvalue;
 	return v;
 }
 vec2 vec2_abs(vec2 v)
 {
-	v.x=(f64)fabs(v.x);
-	v.y=(f64)fabs(v.y);
+	v.x=(r64)fabs(v.x);
+	v.y=(r64)fabs(v.y);
 	return v;
 }
 vec2 vec2_add(vec2 a, vec2 b)
@@ -204,13 +207,13 @@ vec2 vec2_sub(vec2 a, vec2 b)
 	return v;
 }
 
-f64 vec4_len(vec4 v)
+r64 vec4_len(vec4 v)
 {
 	return sqrt(v.x*v.x + v.y*v.y + v.z*v.z + v.w*v.w);
 }
 vec4 vec4_unit(vec4 v)
 {
-	f64 lenvalue=vec4_len(v);
+	r64 lenvalue=vec4_len(v);
 	v.x/=lenvalue;
 	v.y/=lenvalue;
 	v.z/=lenvalue;

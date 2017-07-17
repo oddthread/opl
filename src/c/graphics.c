@@ -21,6 +21,9 @@
 #include "../h/system.h"
 #include <stdio.h>
 
+#include <stdlib.h>
+#include <string.h>
+
 char const *get_error()
 {
 	return SDL_GetError();
@@ -329,7 +332,7 @@ void dtor_texture(texture *t)
 		free (t);
 	}
 }
-void draw_texture(window *w, texture *texture, rect *dest, f32 angle, vec2 *origin, rect *src, rect *clip_region)
+void draw_texture(window *w, texture *texture, rect *dest, r32 angle, vec2 *origin, rect *src, rect *clip_region)
 {
 	if(!texture)return;
 	//these rect structs have same format? can just cast?

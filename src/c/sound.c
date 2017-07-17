@@ -12,6 +12,8 @@
 #include "../h/system.h"
 #include "../h/util.h"
 
+#include <string.h>
+
 static int sound_counter=0;	
 
 void init_sound()
