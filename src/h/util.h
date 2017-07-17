@@ -21,7 +21,6 @@ array[array_size-1]=element;
 	for(i=position; i<array_size-1; i++)\
 	{\
 		array[i]=array[i+1];\
-		printf("%d\n",array[i]);\
 	}\
 	array_size-=1;\
 	array=realloc(array,array_size*sizeof(array[0]));\

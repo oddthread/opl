@@ -1,1 +1,0 @@
-cl -c /EHsc src/c/gpu.c src/c/graphics.c src/c/system.c src/c/input.c src/c/util.c src/c/sound.c src/c/net.c /Z7 /TC
