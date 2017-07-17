@@ -1,10 +1,10 @@
-#ifndef UTIL_H
-#define UTIL_H
+#ifndef d_util_h
+#define d_util_h
 
 #include <stdint.h>
 
 
-#define M_INSERT(array,array_size,position,element) array_size+=1;\
+#define d_insert(array,array_size,position,element) array_size+=1;\
 array=realloc(array,array_size*sizeof(element));\
 for(i=array_size-2; i>=position; i--)\
 {\
@@ -12,11 +12,11 @@ for(i=array_size-2; i>=position; i--)\
 }\
 array[position]=element;
 
-#define M_APPEND(array,array_size,element) array_size+=1;\
+#define d_append(array,array_size,element) array_size+=1;\
 array=realloc(array,array_size*sizeof(element));\
 array[array_size-1]=element;
 
-#define M_REMOVE(array,array_size,position,fn) if(array_size) {\
+#define d_remove(array,array_size,position,fn) if(array_size) {\
 	fn(array[position]);\
 	for(i=position; i<array_size-1; i++)\
 	{\

@@ -1,9 +1,9 @@
-#ifndef OSAL_USE_GPU
+#ifndef d_opl_use_gpu
 
-#ifndef GRAPHICS_H
-#define GRAPHICS_H
+#ifndef d_graphics_h
+#define d_graphics_h
 
-#include "../h/util.h"
+#include "opl/src/h/util.h"
 
 /*@todo 
 create flags for window creation instead of assuming stuff

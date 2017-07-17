@@ -1,9 +1,9 @@
-#ifdef OSAL_USE_GPU
+#ifdef d_opl_use_gpu
 
-#ifndef GPU_H
-#define GPU_H
+#ifndef d_gpu_h
+#define d_gpu_h
 
-#include "../h/util.h"
+#include "opl/src/h/util.h"
 
 /*Returns the screen width and height.*/
 vec2 init_graphics();

@@ -1,7 +1,7 @@
-#ifndef INPUT_H
-#define INPUT_H
+#ifndef d_input_h
+#define d_input_h
 
-#include "../h/util.h"
+#include "opl/src/h/util.h"
 
 void init_input();
 

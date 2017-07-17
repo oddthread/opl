@@ -1,5 +1,5 @@
-#ifndef SOUND_H
-#define SOUND_H
+#ifndef d_sound_h
+#define d_sound_h
 
 void init_sound();
 

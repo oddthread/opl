@@ -1,5 +1,5 @@
-#ifndef SYSTEM_H
-#define SYSTEM_H
+#ifndef d_system_h
+#define d_system_h
 
 #include "../h/util.h"
 

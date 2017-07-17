@@ -1,5 +1,5 @@
-#ifndef NET_H
-#define NET_H
+#ifndef d_net_h
+#define d_net_h
 
 void init_net();
 
