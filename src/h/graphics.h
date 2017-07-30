@@ -3,7 +3,7 @@
 #ifndef d_graphics_h
 #define d_graphics_h
 
-#include "opl/src/h/util.h"
+#include "oul/src/h/oul.h"
 
 /*@todo 
 create flags for window creation instead of assuming stuff

@@ -13,17 +13,36 @@
 
 #include "../h/system.h"
 #include "../h/gpu.h"
-#include "../h/util.h"
+#include "oul/src/h/oul.h"
 #include <time.h>
 
 #include <stdlib.h>
 #include <string.h>
 
+
+void log_str(char *str)
+{
+	printf("%s",str);
+}
+
+void *mem_alloc(u32 bytes)
+{
+	return malloc(bytes);
+}
+void *mem_realloc(void *ptr, u32 bytes)
+{
+	return realloc(ptr,bytes);
+}
+void mem_free(void *p)
+{
+	free(p);
+}
+
 char *get_clipboard_text()
 {
 	return SDL_GetClipboardText();
 }
-void sdl_free(void* p)
+void system_free(void* p)
 {
 	SDL_free(p);
 }
@@ -41,7 +60,7 @@ void sleep_milli(u32 milliseconds)
 }
 
 
-char *malloc_file_cstr(char const *path)
+char *alloc_file_to_str(char *path)
 {//at least 2x slower than it should be
 #ifdef  __APPLE__
 	char adjpath[1024];
@@ -77,7 +96,7 @@ char *malloc_file_cstr(char const *path)
 	//printf("%d\n",buff[sz-1]);
     return buff;
 }
-void write_file_cstr(char const *path, char const *cstr)
+void str_to_file(char *path, char *cstr)
 {
 #ifdef  __APPLE__
 	char adjpath[1024];

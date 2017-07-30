@@ -3,7 +3,7 @@
 
 void init_net();
 
-struct tcp_socket;
+typedef struct tcp_socket tcp_socket;
 tcp_socket *ctor_tcp_socket_connect(char const *ip_address, int port);
 /*
 Do not use this function on a connected socket. Server sockets are never connected to a remote host.

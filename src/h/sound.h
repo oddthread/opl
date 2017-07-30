@@ -3,8 +3,9 @@
 
 void init_sound();
 
-struct sound;
-sound *ctor_sound(char *sound_file_path,bool loop=false);
+typedef struct sound sound;
+
+sound *ctor_sound(char *sound_file_path,bool loop);
 void dtor_sound(sound *s);
 void play_sound(sound *s);
 void pause_sound(sound *s);

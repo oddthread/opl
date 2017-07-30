@@ -17,7 +17,7 @@
 #endif
 
 #include "../h/graphics.h"
-#include "../h/util.h"
+#include "oul/src/h/oul.h"
 #include "../h/system.h"
 #include <stdio.h>
 
@@ -293,7 +293,11 @@ texture *ctor_texture_font(window *w, ttf_font *f,char const *text, color text_c
 	sdl_c.g=text_color.g;
 	sdl_c.b=text_color.b;
 	sdl_c.a=text_color.a;
-	if(!text||!text[0])return NULL;	
+	if(!text||!text[0])
+	{
+		//printf("Invalid text parameter in ctor_texture_font: %d, %d\n",text,text[0]);
+		return NULL;	
+	}
 	SDL_Surface *surf=TTF_RenderText_Blended(f->font,text,sdl_c);
 	if(!surf)
 	{

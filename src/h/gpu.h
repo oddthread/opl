@@ -3,7 +3,7 @@
 #ifndef d_gpu_h
 #define d_gpu_h
 
-#include "opl/src/h/util.h"
+#include "oul/src/h/oul.h"
 
 /*Returns the screen width and height.*/
 vec2 init_graphics();

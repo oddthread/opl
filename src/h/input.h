@@ -1,7 +1,7 @@
 #ifndef d_input_h
 #define d_input_h
 
-#include "opl/src/h/util.h"
+#include "oul/src/h/oul.h"
 
 void init_input();
 
@@ -15,7 +15,7 @@ typedef struct event
 	char *str;
 } event;
 
-/*on windows you must call this every frame*/
+/*on windows you must call this every frame _ON THE MAIN THREAD_*/
 event *poll_input(event*);
 
 extern const s32 ALL_EVENTS;
@@ -38,15 +38,20 @@ s32 get_mod_state();//call to get thing to and with mods
 extern const s32 KEY_MOD_CAPS;
 extern const s32 KEY_MOD_SHIFT;
 
-/*event constants*/
+/*type constants*/
 extern const s64 LEFT_MOUSE;
 extern const s64 RIGHT_MOUSE;
 extern const s64 MIDDLE_MOUSE;
 extern const s64 MOUSE_MOTION;
 extern const s64 MOUSE_WHEEL;
 
+extern const s64 WINDOW_CLOSE;
+extern const s64 FOCUS_GAINED;
+extern const s64 FOCUS_LOST;
+
 extern const s64 DROP_FILE;
 
+/*key constants*/
 extern const s64 KEY_LEFT;
 extern const s64 KEY_RIGHT;
 extern const s64 KEY_UP;
@@ -148,9 +153,5 @@ extern const s64 KEY_LEFT_ALT;
 extern const s64 KEY_RIGHT_SHIFT;
 extern const s64 KEY_RIGHT_CONTROL;
 extern const s64 KEY_RIGHT_ALT;
-
-extern const s64 WINDOW_CLOSE;
-extern const s64 FOCUS_GAINED;
-extern const s64 FOCUS_LOST;
 
 #endif
