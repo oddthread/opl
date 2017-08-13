@@ -1,17 +1,14 @@
+/*This file was automatically generated.*/
 #ifndef d_net_h
 #define d_net_h
 
 void init_net();
-
 typedef struct tcp_socket tcp_socket;
-tcp_socket *ctor_tcp_socket_connect(char const *ip_address, int port);
-/*
-Do not use this function on a connected socket. Server sockets are never connected to a remote host.
- - SDL documentation
-*/
-tcp_socket *ctor_tcp_socket_accept();
+char *malloc_recv(tcp_socket *who);
+void send(tcp_socket *who,char *data);
 void dtor_tcp_socket_close(tcp_socket *sock);
-void send(tcp_socket *who, char *data);
-char *malloc_recv(tcp_socket *who);/*returns NULL if recv 0 bytes*/
+tcp_socket *ctor_tcp_socket_connect(char const *ip_address,int port);
+extern const int MAX_MESSAGE_SIZE_BYTES;
+#define EXPORT_INTERFACE 0
 
 #endif

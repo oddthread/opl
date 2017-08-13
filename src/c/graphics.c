@@ -17,12 +17,30 @@
 #endif
 
 #include "../h/graphics.h"
-#include "oul/src/h/oul.h"
 #include "../h/system.h"
 #include <stdio.h>
-
 #include <stdlib.h>
 #include <string.h>
+
+/*@todo 
+create flags for window creation instead of assuming stuff
+
+remove gpu.h or move shared code outwards or something. everything is duplicated (can do later when working on porting)
+*/
+
+#if EXPORT_INTERFACE
+#include "oul/src/h/oul.h"
+typedef struct texture texture;
+typedef struct ttf_font ttf_font;
+typedef struct window window;
+typedef struct color
+{
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} color;
+#endif
 
 char const *get_error()
 {

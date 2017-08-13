@@ -16,6 +16,10 @@
 
 #include "oul/src/h/oul.h"
 
+#if EXPORT_INTERFACE
+typedef struct tcp_socket tcp_socket;
+#endif
+
 typedef struct tcp_socket
 {
 	TCPsocket sock;

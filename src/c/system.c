@@ -12,13 +12,15 @@
 #include <stdio.h>
 
 #include "../h/system.h"
-#include "../h/gpu.h"
 #include "oul/src/h/oul.h"
 #include <time.h>
 
 #include <stdlib.h>
 #include <string.h>
 
+#if EXPORT_INTERFACE
+#include "oul/src/h/oul.h"
+#endif
 
 void log_str(char *str)
 {
@@ -38,6 +40,7 @@ void mem_free(void *p)
 	free(p);
 }
 
+/*must be freed with system_free*/
 char *get_clipboard_text()
 {
 	return SDL_GetClipboardText();
@@ -125,6 +128,8 @@ void str_to_file(char *path, char *cstr)
     fprintf(fp,"%s",cstr);
     fclose(fp);
 }
+
+/*must be freed with system_free*/
 char *get_base_path()
 {
 	return SDL_GetBasePath();
