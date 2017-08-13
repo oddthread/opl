@@ -4,6 +4,10 @@
 
 #include "oul/src/h/oul.h"
 char apply_shift(char c,bool include_non_alpha);
+#if !defined(OSAL_USE_GPU)
+#include "oul/src/h/oul.h"
+typedef struct window window;
+#endif
 typedef struct event event;
 struct event {
 	s64 type;
