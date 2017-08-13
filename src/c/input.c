@@ -16,19 +16,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if EXPORT_INTERFACE
-#include "oul/src/h/oul.h"
-typedef struct system_cursor system_cursor;
-typedef struct event
-{
-	s64 type;
-	bool pressed;
-	vec2 mouse_info;
-	s64 id;
-	char *str;
-} event;
-#endif
-
 typedef struct system_cursor 
 {
 	SDL_Cursor *c;

@@ -39,6 +39,5 @@ color u32_to_color(u32 hex);
 color value_color(u8 r,u8 g,u8 b,u8 a);
 char const *get_error();
 #endif
-#define EXPORT_INTERFACE 0
 
 #endif

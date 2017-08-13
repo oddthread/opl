@@ -15,6 +15,5 @@ void mem_free(void *p);
 void *mem_realloc(void *ptr,u32 bytes);
 void *mem_alloc(u32 bytes);
 void log_str(char *str);
-#define EXPORT_INTERFACE 0
 
 #endif

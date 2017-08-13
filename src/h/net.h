@@ -9,6 +9,5 @@ void send(tcp_socket *who,char *data);
 void dtor_tcp_socket_close(tcp_socket *sock);
 tcp_socket *ctor_tcp_socket_connect(char const *ip_address,int port);
 extern const int MAX_MESSAGE_SIZE_BYTES;
-#define EXPORT_INTERFACE 0
 
 #endif

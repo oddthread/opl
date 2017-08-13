@@ -141,6 +141,5 @@ vec2 get_mouse_position();
 extern system_cursor *CURSOR_HAND;
 extern system_cursor *CURSOR_NORMAL;
 extern system_cursor *CURSOR_TEXT;
-#define EXPORT_INTERFACE 0
 
 #endif

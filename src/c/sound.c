@@ -14,10 +14,6 @@
 
 #include <string.h>
 
-#if EXPORT_INTERFACE
-typedef struct sound sound;
-#endif
-
 static int sound_counter=0;	
 
 void init_sound()

@@ -18,10 +18,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if EXPORT_INTERFACE
-#include "oul/src/h/oul.h"
-#endif
-
 void log_str(char *str)
 {
 	printf("%s",str);
