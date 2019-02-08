@@ -1,9 +1,7 @@
-#ifndef OSAL_USE_GPU
-
 #ifdef __APPLE__
 #include <SDL2/SDL.h>
-#include <SDL2_image/SDL_image.h>
-#include <SDL2_ttf/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -24,9 +22,20 @@
 
 /*@todo 
 create flags for window creation instead of assuming stuff
-
-remove gpu.h or move shared code outwards or something. everything is duplicated (can do later when working on porting)
 */
+
+texture *ctor_texture_font(window *w,ttf_font *f,char const *text,color text_color){
+	surface *s=ctor_surface_font(f,text,text_color);
+	texture *t=ctor_texture(w,s);
+	dtor_surface(s);
+	return t;
+}
+texture *ctor_texture_pixels(window *w,color *pixels,u32 size_x,u32 size_y){
+	surface *s=ctor_surface_pixels(pixels,size_x,size_y);
+	texture *t=ctor_texture(w,s);
+	dtor_surface(s);
+	return t;
+}
 
 char const *get_error()
 {
@@ -44,7 +53,7 @@ color value_color(u8 r,u8 g,u8 b, u8 a)
 }
 color u32_to_color(u32 hex)
 {
-	u8 bpp=8;//@todo actually handle variable size pixel
+	u8 bpp=8;/*@todo actually handle variable size pixel*/
 	color c;
 	if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
 	{
@@ -63,9 +72,9 @@ color u32_to_color(u32 hex)
 	return c;
 }
 
-u32 color_to_u32(color c)//@bug assumes 32bit pixel
+u32 color_to_u32(color c)/*@bug assumes 32bit pixel*/
 {
-	u8 bpc=8;//@todo actually handle variable size pixel
+	u8 bpc=8;/*@todo actually handle variable size pixel*/
 	if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
 		return ((c.r & 0xff) << bpc*3) + ((c.g & 0xff) << bpc*2) + ((c.b & 0xff) << bpc*1) + (c.a & 0xff << bpc*0);
 	else
@@ -78,7 +87,6 @@ Returns the screen width and height.
 */
 void init_graphics()
 {
-	int flags=SDL_WINDOW_RESIZABLE;
 
 	if( SDL_Init( SDL_INIT_EVERYTHING ) < 0 )
 	{
@@ -86,22 +94,22 @@ void init_graphics()
 		exit(-1);
 	}
 	
-	//Linear texture filtering
 	if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
 	{
 		printf( "SDL_SetHint failed." );
 	}
 
-	if( !IMG_Init( IMG_INIT_PNG ) )//returns bitmask on success, 0 is failure
+	if( !IMG_Init( IMG_INIT_PNG ) )
 	{
 		printf( "IMG_Init failed." );
 	}
 
-	if( TTF_Init() ) {//returns 0 on success, nonzero on error
+	if( TTF_Init() ) {
 		printf( "TTF_Init failed." );
 	}
-
+	
 	SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1"); 
+	SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_PING, "0"); 
 	SDL_SetHintWithPriority(SDL_HINT_RENDER_VSYNC, "1", SDL_HINT_OVERRIDE); 
 	
 	/*if(SDL_GL_SetSwapInterval(-1)==-1)
@@ -110,12 +118,12 @@ void init_graphics()
 	}*/
 }
 
-typedef struct window
+struct window
 {
 	SDL_Window *sdl_window;
 	SDL_Renderer *sdl_renderer;
 	color clear_color;
-} window;
+};
 window *ctor_window(char const *title, u32 size_x, u32 size_y)
 {
 	window *w=(window*)malloc(sizeof(window));
@@ -140,17 +148,17 @@ window *ctor_window(char const *title, u32 size_x, u32 size_y)
 	}
 	if( !( w->sdl_window = SDL_CreateWindow( title,
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		size_x, size_y, flags) ) )//show the window by default
+		size_x, size_y, flags) ) )
 	{
 		printf( "SDL_CreateWindow failed. Application will now exit." );
 		exit(-1);
 	}
 	if( !( w->sdl_renderer = SDL_CreateRenderer( w->sdl_window, -1,
-		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC ) ) )//can or with SDL_RENDERER_PRESENTVSYNC here
+		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC ) ) )
 	{
 		printf( "SDL_CreateRenderer failed." );
 	}
-	//White renderer
+	
 	if( SDL_SetRenderDrawColor( w->sdl_renderer, 255, 255, 255, 255 ) < 0 )
 	{
 		printf( "SDL_SetRenderDrawColor failed. Trying software fallback." );
@@ -234,41 +242,64 @@ static SDL_Surface *make_rgb_surface(int size_x,int size_y)
 
 	if(surf == NULL)
 	{
-		printf(SDL_GetError());
+		printf("%s\n",SDL_GetError());
 	}
 	return surf;
 }
 
-typedef struct texture
+struct texture
 {
 	SDL_Texture *sdl_texture;
-} texture;
+};
 
-typedef struct ttf_font
+struct ttf_font
 {
 	TTF_Font *font;
-} ttf_font;
+};
 
-texture *ctor_texture(window *w, char const *image_file_path)
-{
-	SDL_Surface* surf = IMG_Load( image_file_path );
+struct surface{
+	SDL_Surface *s;
+};
+
+void dtor_surface(surface *s){
+	SDL_FreeSurface( s->s );
+	free(s);
+}
+
+texture *ctor_texture(window *w, surface *surf){
 	texture *t=(texture*)malloc(sizeof(texture));
-	t->sdl_texture = SDL_CreateTextureFromSurface( w->sdl_renderer, surf );
+	if(!t){
+		printf("Texture alloc failed.\n");
+		exit(2);
+	}
+	t->sdl_texture = SDL_CreateTextureFromSurface( w->sdl_renderer, surf->s );
     if(!t->sdl_texture)
     {
-        printf(SDL_GetError());
+        printf("%s\n",SDL_GetError());
     }
-	SDL_FreeSurface( surf );
-    SDL_SetTextureBlendMode(t->sdl_texture, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(t->sdl_texture, SDL_BLENDMODE_BLEND);
 	return t;
 }
-texture *ctor_texture_pixels(window *w, color *pixels, u32 size_x, u32 size_y)
+
+surface *ctor_surface_file(char const *image_file_path)
 {
-    SDL_Surface *surf=make_rgb_surface(size_x,size_y);
+	surface *s=malloc(sizeof(surface));
+	if(!s){
+		printf("Surface alloc failed.\n");
+		exit(2);
+	}
+	s->s = IMG_Load( image_file_path );
+	return s;
+}
+surface *ctor_surface_pixels(color *pixels, u32 size_x, u32 size_y)
+{
+	surface *s=malloc(sizeof(surface));
+	SDL_Surface *surf=make_rgb_surface(size_x,size_y);
+	s->s=surf;
 
 	if(surf==NULL) 
 	{
-        printf(SDL_GetError());
+        printf("%s\n",SDL_GetError());
 	}
 
 	SDL_LockSurface(surf);
@@ -280,18 +311,12 @@ texture *ctor_texture_pixels(window *w, color *pixels, u32 size_x, u32 size_y)
 		}
 	}
 	SDL_UnlockSurface(surf);
-
-	SDL_Texture *sdl_texture=SDL_CreateTextureFromSurface(w->sdl_renderer,surf);
-    if(!sdl_texture)printf(SDL_GetError());
-	SDL_FreeSurface(surf);
-	texture *t=(texture*)malloc(sizeof(texture));
-	t->sdl_texture=sdl_texture;
-    SDL_SetTextureBlendMode(t->sdl_texture, SDL_BLENDMODE_BLEND);
-	return t;
+	return s;
 }
 
-texture *ctor_texture_font(window *w, ttf_font *f,char const *text, color text_color)
+surface *ctor_surface_font(ttf_font *f,char const *text, color text_color)
 {
+	surface *s=malloc(sizeof(surface));
 	SDL_Color sdl_c;
 	sdl_c.r=text_color.r;
 	sdl_c.g=text_color.g;
@@ -299,25 +324,16 @@ texture *ctor_texture_font(window *w, ttf_font *f,char const *text, color text_c
 	sdl_c.a=text_color.a;
 	if(!text||!text[0])
 	{
-		//printf("Invalid text parameter in ctor_texture_font: %d, %d\n",text,text[0]);
 		return NULL;	
 	}
 	SDL_Surface *surf=TTF_RenderText_Blended(f->font,text,sdl_c);
 	if(!surf)
 	{
-        	printf(SDL_GetError());
+		printf("%s\n",SDL_GetError());
 		return NULL;
 	}
-	SDL_Texture *sdl_t=SDL_CreateTextureFromSurface(w->sdl_renderer,surf); 
-	if(!sdl_t)
-	{
-        	printf(SDL_GetError());
-		return NULL;
-	}
-	texture *t=(texture*)malloc(sizeof(texture));
-	t->sdl_texture=sdl_t;
-	SDL_FreeSurface(surf);
-	return t;
+	s->s=surf;
+	return s;
 }
 /*this is incorrect i think, need to use rendertarget
 color *malloc_query_texture_pixels(texture *t, u32 *out_size_x, u32 *out_size_y)
@@ -343,7 +359,7 @@ void dtor_texture(texture *t)
 void draw_texture(window *w, texture *texture, rect *dest, r32 angle, vec2 *origin, rect *src, rect *clip_region)
 {
 	if(!texture)return;
-	//these rect structs have same format? can just cast?
+	/*these rect structs have same format? can just cast?*/
 	SDL_Rect sdl_clip_region;
 
 	SDL_Rect sdl_src;
@@ -409,7 +425,7 @@ ttf_font *ctor_ttf_font(char const *font_file_path,int fontsize)
 	ttf_font *f=(ttf_font*)malloc(sizeof(ttf_font));
 	f->font=TTF_OpenFont(font_file_path, fontsize);
 
-	if(!f->font)printf(SDL_GetError());
+	if(!f->font)printf("%s\n",SDL_GetError());
 
 	return f;
 }
@@ -420,20 +436,25 @@ void dtor_ttf_font(ttf_font *font)
 }
 void size_ttf_font(ttf_font *font, const char *text, int *out_w, int *out_h)
 {
-    /*
-    this check is for linux, on windows it works perfectly fine without this.
-    either TTF_SizeText works on windows with an empty string, or uninitialized variables (the out_w, out_h) happen to be the correct value?
-    */
-	if(!text||!text[0])
-	{
-	    if(out_w)*out_w=0;
-        if(out_h)
-        {
-	        TTF_SizeText(font->font,"test",NULL,out_h);
-        }
-	    return;
-    }
+	if(!text || !text[0] || !out_w || !out_h){
+		if(out_w){
+			*out_w=0;
+		}
+		if(out_h){
+			*out_h=0;
+		}
+		return;
+	}
 	TTF_SizeText(font->font,text,out_w,out_h);
 }
-
-#endif
+void texture_query(texture *t,int *w,int *h){
+	u32 a;
+	int b;
+	SDL_QueryTexture(t->sdl_texture,&a,&b,w,h);
+}
+void msgbox(char const *title, char const *message){
+	
+	SDL_ShowSimpleMessageBox(0,
+    	title,message,
+    	NULL);
+}

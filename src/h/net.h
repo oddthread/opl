@@ -3,6 +3,7 @@
 #define d_net_h
 
 void init_net();
+
 typedef struct tcp_socket tcp_socket;
 char *malloc_recv(tcp_socket *who);
 void send(tcp_socket *who,char *data);

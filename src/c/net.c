@@ -1,5 +1,5 @@
 #ifdef __APPLE__
-#include <SDL2_net/SDL_net.h>
+#include <SDL2/SDL_net.h>
 #else
 
 #ifdef __EMSCRIPTEN__
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "oul/src/h/oul.h"
+#include "../../../oul/src/h/oul.h"
 
 typedef struct tcp_socket
 {

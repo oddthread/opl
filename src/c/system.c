@@ -12,7 +12,7 @@
 #include <stdio.h>
 
 #include "../h/system.h"
-#include "oul/src/h/oul.h"
+#include "../../../oul/src/h/oul.h"
 #include <time.h>
 
 #include <stdlib.h>
@@ -58,10 +58,18 @@ void sleep_milli(u32 milliseconds)
 	SDL_Delay(milliseconds);
 }
 
+void create_empty_file_if_not_exists(char *filepath){
+	FILE *fptr;
+	fptr = fopen(filepath, "rb+");
+	if(fptr == NULL)
+	{
+		fptr = fopen(filepath, "wb");
+	}
+}
 
 char *alloc_file_to_str(char *path)
-{//at least 2x slower than it should be
-#ifdef  __APPLE__
+{
+#ifdef  __APPLEdisabled__
 	char adjpath[1024];
 	uint32_t size = sizeof(adjpath);
 	_NSGetExecutablePath(adjpath, &size);
@@ -92,12 +100,12 @@ char *alloc_file_to_str(char *path)
 	fread(buff, 1, sz, fp);
 	buff[sz]=0;
 	fclose(fp);
-	//printf("%d\n",buff[sz-1]);
+	
     return buff;
 }
 void str_to_file(char *path, char *cstr)
 {
-#ifdef  __APPLE__
+#ifdef  __APPLEdisabled__
 	char adjpath[1024];
 	uint32_t size = sizeof(adjpath);
 	_NSGetExecutablePath(adjpath, &size);
@@ -136,14 +144,44 @@ int rand_num(s32 min, s32 max)
     return 42;//@todo @bug @temp
 }
 #endif
-/*
-struct raw_thread;
-void wait_thread(raw_thread *t,int *status_out);
-raw_thread *ctor_raw_thread(int(*func)(void*),char const *name,void *data);
 
-struct mutex;
-mutex *ctor_mutex();
-void dtor_mutex(mutex* m);
-void lock_mutex(mutex *m);
-void unlock_mutex(mutex *m);
-*/
+struct raw_thread{
+	SDL_Thread *st;
+};
+void dtor_raw_thread(raw_thread *t,int *status_out){
+	SDL_WaitThread(t->st, status_out);
+	free(t);
+}
+raw_thread *ctor_raw_thread(int(*func)(void*),char const *name,void *data){
+	raw_thread *rt=malloc(sizeof(raw_thread));
+
+	rt->st=SDL_CreateThread(func,name,data);
+	if(!rt || !rt->st){
+		printf("raw_thread could not be created.\n");
+		exit(2);
+	}
+	return rt;
+}
+
+struct sem{
+	SDL_sem *ss;
+};
+sem *ctor_sem(int val){
+	sem *l=malloc(sizeof(sem));
+	l->ss=SDL_CreateSemaphore(val);
+	return l;
+}
+void dtor_sem(sem* s){
+	SDL_DestroySemaphore(s->ss);
+	free(s);
+}
+int remove_sem(sem *s){
+	return SDL_SemWait(s->ss);
+}
+int try_remove_sem(sem *s){
+	return SDL_SemTryWait(s->ss);
+}
+int add_sem(sem *s){
+	return SDL_SemPost(s->ss);
+}
+

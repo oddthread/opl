@@ -1,6 +1,6 @@
 #ifdef __APPLE__
 #include <SDL2/SDL.h>
-#include <SDL2_mixer/SDL_mixer.h>
+#include <SDL2/SDL_mixer.h>
 #else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 #include "../h/system.h"
-#include "oul/src/h/oul.h"
+#include "../../../oul/src/h/oul.h"
 
 #include <string.h>
 

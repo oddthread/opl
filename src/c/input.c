@@ -11,15 +11,15 @@
 #include <stdlib.h>
 
 #include "../h/input.h"
-#include "oul/src/h/oul.h"
+#include "../../../oul/src/h/oul.h"
 
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct system_cursor 
+struct system_cursor 
 {
 	SDL_Cursor *c;
-} system_cursor;
+};
 
 /* @bug @corruption
 if CURSOR_TEXT and CURSOR_NORMAL are not zero initialized:
@@ -72,7 +72,7 @@ void init_input()
 	CURSOR_HAND=ctor_system_cursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND));
 }
 
-void set_mouse_capture_on_currently_focused_window(bool capture)
+void capture_mouse_curwindow(bool capture)
 {
 	#ifdef _WIN32	
 	SDL_CaptureMouse(capture);
@@ -220,6 +220,8 @@ const s64 KEY_LEFT_ALT=SDLK_LALT;
 const s64 KEY_RIGHT_SHIFT=SDLK_RSHIFT;
 const s64 KEY_RIGHT_CONTROL=SDLK_RCTRL;
 const s64 KEY_RIGHT_ALT=SDLK_RALT;
+const s64 KEY_RGUI=SDLK_RGUI;
+const s64 KEY_LGUI=SDLK_LGUI;
 
 const s64 WINDOW_CLOSE=SDL_WINDOWEVENT_CLOSE;
 const s64 FOCUS_GAINED=SDL_WINDOWEVENT_FOCUS_GAINED;
@@ -284,111 +286,6 @@ event *poll_input(event *e)
 
 char apply_shift(char c,bool include_non_alpha)
 {
-	if(c=='a')
-	{
-		return 'A';
-	}
-	if(c=='b')
-	{
-		return 'B';
-	}
-	if(c=='c')
-	{
-		return 'C';
-	}
-	if(c=='d')
-	{
-		return 'D';
-	}
-	if(c=='e')
-	{
-		return 'E';
-	}
-	if(c=='f')
-	{
-		return 'F';
-	}
-	if(c=='g')
-	{
-		return 'G';
-	}
-	if(c=='h')
-	{
-		return 'H';
-	}
-	if(c=='i')
-	{
-		return 'I';
-	}	
-	if(c=='j')
-	{
-		return 'J';
-	}
-	if(c=='k')
-	{
-		return 'K';
-	}
-	if(c=='l')
-	{
-		return 'L';
-	}
-	if(c=='m')
-	{
-		return 'M';
-	}
-	if(c=='n')
-	{
-		return 'N';
-	}
-	if(c=='o')
-	{
-		return 'O';
-	}
-	if(c=='p')
-	{
-		return 'P';
-	}
-	if(c=='q')
-	{
-		return 'Q';
-	}
-	if(c=='r')
-	{
-		return 'R';
-	}
-	if(c=='s')
-	{
-		return 'S';
-	}
-	if(c=='t')
-	{
-		return 'T';
-	}
-	if(c=='u')
-	{
-		return 'U';
-	}
-	if(c=='v')
-	{
-		return 'V';
-	}
-	if(c=='w')
-	{
-		return 'W';
-	}
-	if(c=='x')
-	{
-		return 'X';
-	}
-	if(c=='y')
-	{
-		return 'Y';
-	}
-	if(c=='z')
-	{
-		return 'Z';
-	}
-
 	if(include_non_alpha)
 	{
 		if(c=='`')
@@ -477,5 +374,10 @@ char apply_shift(char c,bool include_non_alpha)
 			return '?';
 		}
 	}
+
+	if(c>96&&c<123){
+		return c-32;
+	}
+	
 	return c;
 }

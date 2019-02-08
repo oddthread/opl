@@ -2,12 +2,12 @@
 #ifndef d_input_h
 #define d_input_h
 
-#include "oul/src/h/oul.h"
+#include "../../../oul/src/h/oul.h"
+
+void init_input();
+
 char apply_shift(char c,bool include_non_alpha);
-#if !defined(OSAL_USE_GPU)
-#include "oul/src/h/oul.h"
-typedef struct window window;
-#endif
+
 typedef struct event event;
 struct event {
 	s64 type;
@@ -26,6 +26,8 @@ extern const s64 KEY_RIGHT_SHIFT;
 extern const s64 KEY_LEFT_ALT;
 extern const s64 KEY_LEFT_CONTROL;
 extern const s64 KEY_LEFT_SHIFT;
+extern const s64 KEY_RGUI;
+extern const s64 KEY_LGUI;
 extern const s64 KEY_Z;
 extern const s64 KEY_Y;
 extern const s64 KEY_X;
@@ -135,8 +137,7 @@ extern const s32 MOUSE_EVENTS;
 extern const s32 ALL_EVENTS;
 typedef struct system_cursor system_cursor;
 void set_cursor(system_cursor *s);
-void set_mouse_capture_on_currently_focused_window(bool capture);
-void init_input();
+void capture_mouse_curwindow(bool capture);
 vec2 get_mouse_position();
 extern system_cursor *CURSOR_HAND;
 extern system_cursor *CURSOR_NORMAL;
