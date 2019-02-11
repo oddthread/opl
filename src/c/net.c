@@ -40,8 +40,12 @@ void dtor_tcp_socket_close(tcp_socket *sock)
 	free(sock);
 }
 
-void send(tcp_socket *who, char *data)
+void opl_send(tcp_socket *who, char *data)
 {
+	/*
+	somehow this function (which used to just be called send) was overwriting pulseaudio "send" symbol when linking which was causing bizarre bug
+	should probably change the names of all these function to be prefixed by their package name
+	*/
 	char const *error;
 	if(!who)return;
 	if(!data||!data[0])return;
