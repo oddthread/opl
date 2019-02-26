@@ -21,8 +21,21 @@ typedef struct tcp_socket
 	TCPsocket sock;
 } tcp_socket;
 
-const int MAX_MESSAGE_SIZE_BYTES=100;
+tcp_socket *ctor_tcp_socket_accept(tcp_socket *server_socket){
+	// accept a connection coming in on server_tcpsock
 
+	tcp_socket *client=(tcp_socket*)malloc(sizeof(tcp_socket));
+	
+	client->sock=SDLNet_TCP_Accept(server_socket->sock);
+	
+	if(!client->sock) {
+		return NULL;
+		printf("SDLNet_TCP_Accept: %s\n", SDLNet_GetError());
+	}
+	else {
+		return client;
+	}
+}
 tcp_socket *ctor_tcp_socket_connect(char const *ip_address, int port)
 {
 	IPaddress myip;
@@ -31,6 +44,12 @@ tcp_socket *ctor_tcp_socket_connect(char const *ip_address, int port)
 	SDLNet_ResolveHost(&myip,ip_address,port);
 	sock=(tcp_socket*)malloc(sizeof(tcp_socket));
 	sock->sock=SDLNet_TCP_Open(&myip);
+	if(!sock->sock){
+		printf("SDLNet_TCP_Open: %s\n", SDL_GetError());
+		SDL_ClearError();
+		free(sock);
+		return NULL;
+	}
 	return sock;
 }
 
@@ -40,7 +59,7 @@ void dtor_tcp_socket_close(tcp_socket *sock)
 	free(sock);
 }
 
-void opl_send(tcp_socket *who, char *data)
+void opl_send(tcp_socket *who, char *data, u32 bytes)
 {
 	/*
 	somehow this function (which used to just be called send) was overwriting pulseaudio "send" symbol when linking which was causing bizarre bug
@@ -48,31 +67,26 @@ void opl_send(tcp_socket *who, char *data)
 	*/
 	char const *error;
 	if(!who)return;
-	if(!data||!data[0])return;
+	if(!data)return;
 
-	SDLNet_TCP_Send(who->sock,data,strlen(data));/*should not need terminating null*/
-	error=SDLNet_GetError();
+	SDLNet_TCP_Send(who->sock,data,bytes);
+	error=SDL_GetError();
 	if(error)
 	{
-		printf("SDLNet send error.\n");
+		printf("SDLNet send error: %s\n",error);
+		SDL_ClearError();
 	}
 }
-char *malloc_recv(tcp_socket *who)
+char *opl_recv(tcp_socket *who, char *ptr, u32 bytes)
 {
-	char *buff=(char*)malloc(MAX_MESSAGE_SIZE_BYTES+1);/*null terminated*/
-	int i=0;
-	u32 bytes;
-	for(i=0; i<MAX_MESSAGE_SIZE_BYTES+1; i++)
-	{
-		buff[i]=0;
-	}
-	bytes=SDLNet_TCP_Recv(who->sock,buff,MAX_MESSAGE_SIZE_BYTES);
+	/*
+	from SDL documentation:
+	If you read more than is sent from the other end, then it will wait until the full requested length is sent, or until the connection is closed from the other end.
+	(so do not need to worry about zeroing the buffer)
+	*/
+	u32 received=SDLNet_TCP_Recv(who->sock,ptr,bytes);
 	
-	if(bytes<=0)
-	{
-		return NULL;
-	}
-	return buff;
+	return ptr;
 }
 
 void init_net()
