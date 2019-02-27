@@ -283,7 +283,7 @@ texture *ctor_texture(window *w, surface *surf){
 
 surface *ctor_surface_file(char const *image_file_path)
 {
-	surface *s=malloc(sizeof(surface));
+	surface *s=(surface*)malloc(sizeof(surface));
 	if(!s){
 		printf("Surface alloc failed.\n");
 		exit(2);
@@ -293,7 +293,7 @@ surface *ctor_surface_file(char const *image_file_path)
 }
 surface *ctor_surface_pixels(color *pixels, u32 size_x, u32 size_y)
 {
-	surface *s=malloc(sizeof(surface));
+	surface *s=(surface*)malloc(sizeof(surface));
 	SDL_Surface *surf=make_rgb_surface(size_x,size_y);
 	s->s=surf;
 
@@ -316,7 +316,7 @@ surface *ctor_surface_pixels(color *pixels, u32 size_x, u32 size_y)
 
 surface *ctor_surface_font(ttf_font *f,char const *text, color text_color)
 {
-	surface *s=malloc(sizeof(surface));
+	surface *s=(surface*)malloc(sizeof(surface));
 	SDL_Color sdl_c;
 	sdl_c.r=text_color.r;
 	sdl_c.g=text_color.g;

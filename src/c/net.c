@@ -30,7 +30,6 @@ tcp_socket *ctor_tcp_socket_accept(tcp_socket *server_socket){
 	
 	if(!client->sock) {
 		return NULL;
-		printf("SDLNet_TCP_Accept: %s\n", SDLNet_GetError());
 	}
 	else {
 		return client;
@@ -59,34 +58,34 @@ void dtor_tcp_socket_close(tcp_socket *sock)
 	free(sock);
 }
 
-void opl_send(tcp_socket *who, char *data, u32 bytes)
+int opl_send(tcp_socket *who, char *data, u32 bytes)
 {
 	/*
 	somehow this function (which used to just be called send) was overwriting pulseaudio "send" symbol when linking which was causing bizarre bug
 	should probably change the names of all these function to be prefixed by their package name
 	*/
 	char const *error;
-	if(!who)return;
-	if(!data)return;
+	if(!who)return 0;
+	if(!data)return 0;
 
-	SDLNet_TCP_Send(who->sock,data,bytes);
+	int len=SDLNet_TCP_Send(who->sock,data,bytes);
 	error=SDL_GetError();
 	if(error)
 	{
-		printf("SDLNet send error: %s\n",error);
 		SDL_ClearError();
 	}
+	return len;
 }
-char *opl_recv(tcp_socket *who, char *ptr, u32 bytes)
+int opl_recv(tcp_socket *who, char *ptr, u32 bytes)
 {
 	/*
 	from SDL documentation:
 	If you read more than is sent from the other end, then it will wait until the full requested length is sent, or until the connection is closed from the other end.
 	(so do not need to worry about zeroing the buffer)
 	*/
-	u32 received=SDLNet_TCP_Recv(who->sock,ptr,bytes);
+	int received=SDLNet_TCP_Recv(who->sock,ptr,bytes);
 	
-	return ptr;
+	return received;
 }
 
 void init_net()

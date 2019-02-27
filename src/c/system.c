@@ -18,6 +18,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+float opl_ntohf(float value){
+    return SDL_SwapFloatBE(value);
+}
+float opl_htonf(float value){
+	if(SDL_BYTEORDER==SDL_LIL_ENDIAN){
+		return SDL_SwapFloat(value);
+	}
+	return value;
+}
+
 void log_str(char *str)
 {
 	printf("%s",str);
@@ -153,7 +163,7 @@ void dtor_raw_thread(raw_thread *t,int *status_out){
 	free(t);
 }
 raw_thread *ctor_raw_thread(int(*func)(void*),char const *name,void *data){
-	raw_thread *rt=malloc(sizeof(raw_thread));
+	raw_thread *rt=(raw_thread*)malloc(sizeof(raw_thread));
 
 	rt->st=SDL_CreateThread(func,name,data);
 	if(!rt || !rt->st){
@@ -167,7 +177,7 @@ struct sem{
 	SDL_sem *ss;
 };
 sem *ctor_sem(int val){
-	sem *l=malloc(sizeof(sem));
+	sem *l=(sem*)malloc(sizeof(sem));
 	l->ss=SDL_CreateSemaphore(val);
 	return l;
 }

@@ -10,6 +10,8 @@ char *alloc_file_to_str(char *path);
 void sleep_milli(u32 milliseconds);
 s64 milli_current_time();
 void create_empty_file_if_not_exists(char *filepath);
+float opl_ntohf(float value);
+float opl_htonf(float value);
 void set_clipboard_text(char *c);
 void system_free(void *p);
 char *get_clipboard_text();

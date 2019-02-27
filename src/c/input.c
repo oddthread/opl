@@ -60,7 +60,7 @@ vec2 get_mouse_position()
 }
 static system_cursor *ctor_system_cursor(SDL_Cursor* c)
 {
-	system_cursor *s=malloc(sizeof(system_cursor));
+	system_cursor *s=(system_cursor*)malloc(sizeof(system_cursor));
 	s->c=c;
 	return s;
 }

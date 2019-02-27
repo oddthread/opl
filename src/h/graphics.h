@@ -45,6 +45,7 @@ void window_set_size(window *w,u32 size_x,u32 size_y);
 void dtor_window(window *w);
 window *ctor_window(char const *title,u32 size_x,u32 size_y);
 u32 color_to_u32(color c);
+#define color_to_hex color_to_u32
 color u32_to_color(u32 hex);
 color value_color(u8 r,u8 g,u8 b,u8 a);
 char const *get_error();
