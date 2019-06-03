@@ -18,7 +18,7 @@
 
 struct system_cursor 
 {
-	SDL_Cursor *c;
+    SDL_Cursor *c;
 };
 
 /* @bug @corruption
@@ -50,66 +50,68 @@ static system_cursor *current_cursor=NULL;
 
 vec2 get_mouse_position()
 {
-	vec2 v;
-	s32 x;
-	s32 y;
-	SDL_GetMouseState(&x,&y);
-	v.x=x;
-	v.y=y;
-	return v;
+    vec2 v;
+    s32 x;
+    s32 y;
+    SDL_GetMouseState(&x,&y);
+    v.x=x;
+    v.y=y;
+    return v;
 }
 static system_cursor *ctor_system_cursor(SDL_Cursor* c)
 {
-	system_cursor *s=(system_cursor*)malloc(sizeof(system_cursor));
-	s->c=c;
-	return s;
+    system_cursor *s=(system_cursor*)malloc(sizeof(system_cursor));
+    s->c=c;
+    return s;
 }
 
 void init_input()
 {
-	CURSOR_NORMAL=ctor_system_cursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW));
-	CURSOR_TEXT=ctor_system_cursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_IBEAM));
-	CURSOR_HAND=ctor_system_cursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND));
+    CURSOR_NORMAL=ctor_system_cursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW));
+    CURSOR_TEXT=ctor_system_cursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_IBEAM));
+    CURSOR_HAND=ctor_system_cursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND));
 }
 
 void capture_mouse_curwindow(bool capture)
 {
-	#ifdef _WIN32	
-	SDL_CaptureMouse(capture);
-	#endif
+    #ifdef _WIN32    
+    SDL_CaptureMouse(capture);
+    #endif
 }
-	
+    
 
 void set_cursor(system_cursor *s)
 {
-	if(s!=current_cursor)
-	{
-		SDL_SetCursor(s->c);
-		current_cursor=s;
-	}
+    if(s!=current_cursor)
+    {
+        SDL_SetCursor(s->c);
+        current_cursor=s;
+    }
 }
 
 const s32 ALL_EVENTS=0;
 const s32 MOUSE_EVENTS=1;
 void flush_events(s32 event_type)
 {
-	SDL_PumpEvents();
-	if(event_type==ALL_EVENTS)
-	{
-		SDL_FlushEvents(SDL_FIRSTEVENT,SDL_LASTEVENT);
-	}
-	if(event_type==MOUSE_EVENTS)
-	{
-		SDL_FlushEvent(SDL_MOUSEBUTTONDOWN | SDL_MOUSEBUTTONUP);
-	}
+    SDL_PumpEvents();
+    if(event_type==ALL_EVENTS)
+    {
+        SDL_FlushEvents(SDL_FIRSTEVENT,SDL_LASTEVENT);
+    }
+    if(event_type==MOUSE_EVENTS)
+    {
+        SDL_FlushEvent(SDL_MOUSEBUTTONDOWN | SDL_MOUSEBUTTONUP);
+    }
 }
 
 s32 get_mod_state()
 {
-	return SDL_GetModState();
+    return SDL_GetModState();
 }
 const s32 KEY_MOD_CAPS=KMOD_CAPS;
 const s32 KEY_MOD_SHIFT=KMOD_SHIFT;
+const s32 KEY_MOD_ALT=KMOD_ALT;
+const s32 KEY_MOD_GUI=KMOD_GUI;
 
 const s64 LEFT_MOUSE=SDL_BUTTON_LEFT;
 const s64 RIGHT_MOUSE=SDL_BUTTON_RIGHT;
@@ -229,155 +231,155 @@ const s64 FOCUS_LOST=SDL_WINDOWEVENT_FOCUS_LOST;
 
 event *poll_input(event *e)
 {
-	SDL_Event sdl_event;
-	if(SDL_PollEvent( &sdl_event ))
-	{
-		/*if( sdl_event.type == SDL_QUIT ) exit( 0 );*//*if they try to close the window we just quit immediately*/
-		if (sdl_event.type == SDL_WINDOWEVENT) 
-		{
-			e->type=sdl_event.window.event;
-			e->id=sdl_event.window.windowID;	
-		}
-		if(sdl_event.type==SDL_DROPFILE)
-		{
-			e->type=SDL_DROPFILE;
-			e->str=sdl_event.drop.file;
-		}
-		if( sdl_event.key.type == SDL_KEYDOWN )
-		{
-			e->type=sdl_event.key.keysym.sym;
-			e->pressed=true;
-		}
-		if( sdl_event.key.type == SDL_KEYUP )
-		{
-			e->type=sdl_event.key.keysym.sym;
-			e->pressed=false;
-		}
+    SDL_Event sdl_event;
+    if(SDL_PollEvent( &sdl_event ))
+    {
+        /*if( sdl_event.type == SDL_QUIT ) exit( 0 );*//*if they try to close the window we just quit immediately*/
+        if (sdl_event.type == SDL_WINDOWEVENT) 
+        {
+            e->type=sdl_event.window.event;
+            e->id=sdl_event.window.windowID;    
+        }
+        if(sdl_event.type==SDL_DROPFILE)
+        {
+            e->type=SDL_DROPFILE;
+            e->str=sdl_event.drop.file;
+        }
+        if( sdl_event.key.type == SDL_KEYDOWN )
+        {
+            e->type=sdl_event.key.keysym.sym;
+            e->pressed=true;
+        }
+        if( sdl_event.key.type == SDL_KEYUP )
+        {
+            e->type=sdl_event.key.keysym.sym;
+            e->pressed=false;
+        }
 
-		if( sdl_event.button.type == SDL_MOUSEBUTTONDOWN )
-		{
-			e->type=sdl_event.button.button;
-			e->pressed=true;
-		}
-		if( sdl_event.button.type == SDL_MOUSEBUTTONUP )
-		{
-			e->type=sdl_event.button.button;
-			e->pressed=false;
-		}
+        if( sdl_event.button.type == SDL_MOUSEBUTTONDOWN )
+        {
+            e->type=sdl_event.button.button;
+            e->pressed=true;
+        }
+        if( sdl_event.button.type == SDL_MOUSEBUTTONUP )
+        {
+            e->type=sdl_event.button.button;
+            e->pressed=false;
+        }
 
-		if( sdl_event.button.type == SDL_MOUSEMOTION )
-		{
-			e->type=SDL_MOUSEMOTION;
-			e->pressed=false;
-			e->mouse_info.x = sdl_event.motion.x;
-			e->mouse_info.y = sdl_event.motion.y;
-		}
-		if( sdl_event.wheel.type == SDL_MOUSEWHEEL )
-		{
-			e->type=SDL_MOUSEWHEEL;
-			e->pressed=false;
-			e->mouse_info.x = -sdl_event.wheel.x;
-			e->mouse_info.y = -sdl_event.wheel.y;
-		}
-		return e;
-	}
-	return NULL;
+        if( sdl_event.button.type == SDL_MOUSEMOTION )
+        {
+            e->type=SDL_MOUSEMOTION;
+            e->pressed=false;
+            e->mouse_info.x = sdl_event.motion.x;
+            e->mouse_info.y = sdl_event.motion.y;
+        }
+        if( sdl_event.wheel.type == SDL_MOUSEWHEEL )
+        {
+            e->type=SDL_MOUSEWHEEL;
+            e->pressed=false;
+            e->mouse_info.x = -sdl_event.wheel.x;
+            e->mouse_info.y = -sdl_event.wheel.y;
+        }
+        return e;
+    }
+    return NULL;
 }
 
 char apply_shift(char c,bool include_non_alpha)
 {
-	if(include_non_alpha)
-	{
-		if(c=='`')
-		{
-			return '~';
-		}
-		if(c=='1')
-		{
-			return '!';
-		}
-		if(c=='2')
-		{
-			return '@';
-		}
-		if(c=='3')
-		{
-			return '#';
-		}
-		if(c=='4')
-		{
-			return '$';
-		}
-		if(c=='5')
-		{
-			return '%';
-		}
-		if(c=='6')
-		{
-			return '^';
-		}
-		if(c=='7')
-		{
-			return '&';
-		}
-		if(c=='8')
-		{
-			return '*';
-		}
-		if(c=='9')
-		{
-			return '(';
-		}
-		if(c=='0')
-		{
-			return ')';
-		}
-		if(c=='-')
-		{
-			return '_';
-		}
-		if(c=='=')
-		{
-			return '+';
-		}
+    if(include_non_alpha)
+    {
+        if(c=='`')
+        {
+            return '~';
+        }
+        if(c=='1')
+        {
+            return '!';
+        }
+        if(c=='2')
+        {
+            return '@';
+        }
+        if(c=='3')
+        {
+            return '#';
+        }
+        if(c=='4')
+        {
+            return '$';
+        }
+        if(c=='5')
+        {
+            return '%';
+        }
+        if(c=='6')
+        {
+            return '^';
+        }
+        if(c=='7')
+        {
+            return '&';
+        }
+        if(c=='8')
+        {
+            return '*';
+        }
+        if(c=='9')
+        {
+            return '(';
+        }
+        if(c=='0')
+        {
+            return ')';
+        }
+        if(c=='-')
+        {
+            return '_';
+        }
+        if(c=='=')
+        {
+            return '+';
+        }
 
-		if(c=='[')
-		{
-			return '{';
-		}
-		if(c==']')
-		{
-			return '}';
-		}
-		if(c=='\\')
-		{
-			return '|';
-		}
-		if(c==';')
-		{
-			return ':';
-		}
-		if(c=='\'')
-		{
-			return '"';
-		}
-		if(c==',')
-		{
-			return '<';
-		}
-		if(c=='.')
-		{
-			return '>';
-		}
-		if(c=='/')
-		{
-			return '?';
-		}
-	}
+        if(c=='[')
+        {
+            return '{';
+        }
+        if(c==']')
+        {
+            return '}';
+        }
+        if(c=='\\')
+        {
+            return '|';
+        }
+        if(c==';')
+        {
+            return ':';
+        }
+        if(c=='\'')
+        {
+            return '"';
+        }
+        if(c==',')
+        {
+            return '<';
+        }
+        if(c=='.')
+        {
+            return '>';
+        }
+        if(c=='/')
+        {
+            return '?';
+        }
+    }
 
-	if(c>96&&c<123){
-		return c-32;
-	}
-	
-	return c;
+    if(c>96&&c<123){
+        return c-32;
+    }
+    
+    return c;
 }

@@ -10,11 +10,11 @@ char apply_shift(char c,bool include_non_alpha);
 
 typedef struct event event;
 struct event {
-	s64 type;
-	bool pressed;
-	vec2 mouse_info;
-	s64 id;
-	char *str;
+    s64 type;
+    bool pressed;
+    vec2 mouse_info;
+    s64 id;
+    char *str;
 };
 event *poll_input(event *e);
 extern const s64 FOCUS_LOST;
@@ -131,6 +131,9 @@ extern const s64 RIGHT_MOUSE;
 extern const s64 LEFT_MOUSE;
 extern const s32 KEY_MOD_SHIFT;
 extern const s32 KEY_MOD_CAPS;
+extern const s32 KEY_MOD_ALT;
+extern const s32 KEY_MOD_GUI;
+
 s32 get_mod_state();
 void flush_events(s32 event_type);
 extern const s32 MOUSE_EVENTS;
