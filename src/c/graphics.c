@@ -300,6 +300,8 @@ surface *ctor_surface_pixels(color *pixels, u32 size_x, u32 size_y)
 	if(surf==NULL) 
 	{
         printf("%s\n",SDL_GetError());
+		free(s);
+		return NULL;
 	}
 
 	SDL_LockSurface(surf);
