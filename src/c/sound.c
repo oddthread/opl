@@ -49,6 +49,9 @@ void dtor_sound(sound *s)
 	Mix_FreeChunk(s->m);
 	free(s);
 }
+void set_volume_sound(sound *s, float normalized){
+	Mix_Volume(s->channel, normalized * 128);
+}
 void play_sound(sound *s)
 {
 	Mix_PlayChannel( s->channel, s->m, s->loop?-1:0 );
