@@ -36,7 +36,7 @@ typedef struct sound
 	Mix_Chunk *m;
 	int channel;
 } sound;
-sound *ctor_sound( char *sound_file_path, bool loop )
+sound *ctor_sound( char const *sound_file_path, bool loop )
 {	
 	sound *s=(sound*)malloc(sizeof(sound));
 	s->m=Mix_LoadWAV(sound_file_path);
@@ -51,7 +51,7 @@ void dtor_sound(sound *s)
 }
 void play_sound(sound *s)
 {
-	Mix_PlayChannel( s->channel, s->m, 0 );
+	Mix_PlayChannel( s->channel, s->m, s->loop?-1:0 );
 }
 void pause_sound(sound *s)
 {
