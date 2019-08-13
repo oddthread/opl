@@ -9,6 +9,6 @@ void resume_sound(sound *s);
 void pause_sound(sound *s);
 void play_sound(sound *s);
 void dtor_sound(sound *s);
-sound *ctor_sound(char *sound_file_path,bool loop);
+sound *ctor_sound(char const *sound_file_path,bool loop);
 
 #endif
