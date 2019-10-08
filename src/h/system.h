@@ -4,6 +4,7 @@
 
 #include "../../../oul/src/h/oul.h"
 
+char *sdl_file_read(const char* filename);
 char *get_base_path();
 void str_to_file(char *path,char *cstr);
 char *alloc_file_to_str(char *path);

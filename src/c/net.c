@@ -1,13 +1,15 @@
 #ifdef __APPLE__
-#include <SDL2/SDL_net.h>
+    #include "TargetConditionals.h"
+    #if TARGET_OS_IOS
+	#include "SDL.h"
+	#include "SDL_net.h"
+    #else
+	#include <SDL2/SDL.h>
+	#include <SDL2/SDL_net.h>
+    #endif
 #else
-
-#ifdef __EMSCRIPTEN__
-#include <SDL_net.h>
-#else
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_net.h>
-#endif 
-
 #endif
 
 #include <stdio.h>

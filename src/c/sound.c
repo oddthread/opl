@@ -1,6 +1,12 @@
 #ifdef __APPLE__
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
+    #include "TargetConditionals.h"
+    #if TARGET_OS_IOS
+	#include "SDL.h"
+    #include "SDL_mixer.h"
+    #else
+	#include <SDL2/SDL.h>
+    #include <SDL2/SDL_mixer.h>
+    #endif
 #else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>

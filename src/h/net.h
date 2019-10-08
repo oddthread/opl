@@ -2,7 +2,7 @@
 #ifndef d_net_h
 #define d_net_h
 
-#include "oul/src/h/oul.h"
+#include "../../../oul/src/h/oul.h"
 
 void init_net();
 

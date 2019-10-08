@@ -1,17 +1,18 @@
 #ifdef __APPLE__
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
+    #include "TargetConditionals.h"
+    #if TARGET_OS_IOS
+	#include "SDL.h"
+	#include "SDL_image.h"
+    #include "SDL_ttf.h"
+    #else
+	#include <SDL2/SDL.h>
+	#include <SDL2/SDL_ttf.h>
+	#include <SDL2/SDL_image.h>
+    #endif
 #else
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-
-#ifdef __EMSCRIPTEN__
-#include <SDL_ttf.h>
-#else
 #include <SDL2/SDL_ttf.h>
-#endif
-
+#include <SDL2/SDL_image.h>
 #endif
 
 #include "../h/graphics.h"

@@ -3,7 +3,12 @@
 #endif
 
 #ifdef __APPLE__
-#include <SDL2/SDL.h>
+    #include "TargetConditionals.h"
+    #if TARGET_OS_IOS
+	#include "SDL.h"
+    #else
+	#include <SDL2/SDL.h>
+    #endif
 #else
 #include <SDL2/SDL.h>
 #endif
@@ -17,7 +22,57 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 
+void list_dir(char const *path){
+	struct dirent *de;
+    DIR *dr = opendir(path); 
+    if (dr == NULL){
+        printf("Directory doesn't exist: %s\n",path); 
+        return;
+    } 
+    while ((de = readdir(dr)) != NULL) 
+            printf("%s\n", de->d_name); 
+  
+    closedir(dr);  
+}
+char* sdl_file_read(char const *filename) {
+		/*
+		#ifdef __APPLE__
+			#include "TargetConditionals.h"
+			#if TARGET_OS_IOS
+            char buff[2048];
+            strcat(buff,SDL_GetBasePath());
+			list_dir("./");
+            strcat(buff,"Resources/");
+            strcat(buff,filename);
+            filename=buff;
+			printf("final filename: %s\n",filename);
+			#endif
+		#endif
+		*/
+        SDL_RWops *rw = SDL_RWFromFile(filename, "rb");
+        if (rw == NULL) return NULL;
+
+        Sint64 res_size = SDL_RWsize(rw);
+        char* res = (char*)malloc(res_size + 1);
+
+        Sint64 nb_read_total = 0, nb_read = 1;
+        char* buf = res;
+        while (nb_read_total < res_size && nb_read != 0) {
+                nb_read = SDL_RWread(rw, buf, 1, (res_size - nb_read_total));
+                nb_read_total += nb_read;
+                buf += nb_read;
+        }
+        SDL_RWclose(rw);
+        if (nb_read_total != res_size) {
+                free(res);
+                return NULL;
+        }
+
+        res[nb_read_total] = '\0';
+        return res;
+}
 float opl_ntohf(float value){
     return SDL_SwapFloatBE(value);
 }
