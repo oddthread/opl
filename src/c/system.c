@@ -36,7 +36,7 @@ void list_dir(char const *path){
   
     closedir(dr);  
 }
-char* sdl_file_read(char const *filename) {
+char *sdl_file_read(const char *filename) {
 		/*
 		#ifdef __APPLE__
 			#include "TargetConditionals.h"
