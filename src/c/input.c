@@ -244,6 +244,9 @@ const s64 FOCUS_LOST=SDL_WINDOWEVENT_FOCUS_LOST;
 
 event *poll_input(event *e)
 {
+    e->type=0;//reset type incase no event and looking at after
+    //this function is really awful and buggy, and some code looks at the event after even when it returns null
+    
     SDL_Event sdl_event;
     if(SDL_PollEvent( &sdl_event ))
     {
