@@ -60,7 +60,7 @@ void set_volume_sound(sound *s, float normalized){
 }
 void play_sound(sound *s)
 {
-	Mix_PlayChannel( s->channel, s->m, s->loop?-1:0 );
+	Mix_PlayChannel( -1, s->m, s->loop?-1:0 );
 }
 void pause_sound(sound *s)
 {
