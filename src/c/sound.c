@@ -47,7 +47,7 @@ sound *ctor_sound( char const *sound_file_path, bool loop )
 	sound *s=(sound*)malloc(sizeof(sound));
 	s->m=Mix_LoadWAV(sound_file_path);
 	s->loop=loop;
-	s->channel=sound_counter++;
+	s->channel=sound_counter % MIX_CHANNELS;
 	return s;
 }
 void dtor_sound(sound *s)
@@ -55,12 +55,13 @@ void dtor_sound(sound *s)
 	Mix_FreeChunk(s->m);
 	free(s);
 }
+//this is really stupid, it changes the volume for all sounds on the channel, so basically have to call this for every sound you play before playing it to ensure the proper volume is set. volume should just be a parameter of the play_sound function and this one can be removed if not allocating channels. (or just use sdl directly)
 void set_volume_sound(sound *s, float normalized){
 	Mix_Volume(s->channel, normalized * 128);
 }
 void play_sound(sound *s)
 {
-	Mix_PlayChannel( -1, s->m, s->loop?-1:0 );
+	Mix_PlayChannel(s->channel, s->m, s->loop?-1:0 );
 }
 void pause_sound(sound *s)
 {
