@@ -5,7 +5,6 @@
 #include "../../../oul/src/h/oul.h"
 
 void init_graphics();
-
 typedef struct ttf_font ttf_font;
 void size_ttf_font(ttf_font *font,const char *text,int *out_w,int *out_h);
 void dtor_ttf_font(ttf_font *font);
