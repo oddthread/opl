@@ -42,12 +42,12 @@ typedef struct sound
 	Mix_Chunk *m;
 	int channel;
 } sound;
-sound *ctor_sound( char const *sound_file_path, bool loop )
+sound *ctor_sound( char const *sound_file_path, bool loop, int channel )
 {	
 	sound *s=(sound*)malloc(sizeof(sound));
 	s->m=Mix_LoadWAV(sound_file_path);
 	s->loop=loop;
-	s->channel=sound_counter % MIX_CHANNELS;
+	s->channel = channel;
 	return s;
 }
 void dtor_sound(sound *s)
