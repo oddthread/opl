@@ -4,7 +4,13 @@
 
 #include "../../../oul/src/h/oul.h"
 
+typedef struct sdl_file_read_raw_result {
+	void *data;
+	unsigned long long data_sz;
+} sdl_file_read_raw_result;
+
 char *sdl_file_read(const char* filename);
+sdl_file_read_raw_result sdl_file_read_raw(const char *path);
 char *get_base_path();
 void str_to_file(char *path,char *cstr);
 char *alloc_file_to_str(char *path);
