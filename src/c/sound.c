@@ -50,6 +50,14 @@ sound *ctor_sound( char const *sound_file_path, bool loop, int channel )
 	s->channel = channel;
 	return s;
 }
+sound *ctor_sound_rw( SDL_RWops *sound_file, bool loop, int channel )
+{	
+	sound *s=(sound*)malloc(sizeof(sound));
+	s->m=Mix_LoadWAV_RW(sound_file, 0);
+	s->loop=loop;
+	s->channel = channel;
+	return s;
+}
 void dtor_sound(sound *s)
 {
 	Mix_FreeChunk(s->m);
