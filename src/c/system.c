@@ -22,20 +22,20 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
+//#include <dirent.h>
 
-void list_dir(char const *path){
-	struct dirent *de;
-    DIR *dr = opendir(path); 
-    if (dr == NULL){
-        printf("Directory doesn't exist: %s\n",path); 
-        return;
-    } 
-    while ((de = readdir(dr)) != NULL) 
-            printf("%s\n", de->d_name); 
+// void list_dir(char const *path){
+// 	struct dirent *de;
+//     DIR *dr = opendir(path); 
+//     if (dr == NULL){
+//         printf("Directory doesn't exist: %s\n",path); 
+//         return;
+//     } 
+//     while ((de = readdir(dr)) != NULL) 
+//             printf("%s\n", de->d_name); 
   
-    closedir(dr);  
-}
+//     closedir(dr);  
+// }
 
 sdl_file_read_raw_result sdl_file_read_raw(const char *path){
 	sdl_file_read_raw_result sfrrr = {0};
